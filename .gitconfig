@@ -1,4 +1,5 @@
 [color]
+	diff = auto
 	ui = auto
 [log]
 	date = local

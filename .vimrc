@@ -15,6 +15,7 @@ set noincsearch
 set wildmenu
 set wildmode=longest,list,full
 set ttimeoutlen=100
+set showcmd
 
 nmap , ,,
 nmap ,o o<CR>

@@ -7,8 +7,8 @@ fi
 
 # User specific environment and startup programs
 
-PATH=$HOME/bin:$PATH
-LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH
+PATH=$PATH:$HOME/bin
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/lib
 EDITOR=vim
 
 shopt -s checkwinsize
@@ -16,3 +16,4 @@ shopt -s checkwinsize
 export PATH
 export LD_LIBRARY_PATH
 export EDITOR
+
