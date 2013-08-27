@@ -1,0 +1,9 @@
+[color]
+	ui = auto
+[log]
+	date = local
+[blame]
+	date = local
+[alias]
+	graph = log --decorate --all --graph
+	sb = status -sb

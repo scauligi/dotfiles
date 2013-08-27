@@ -1,0 +1,26 @@
+#!/bin/bash
+
+CUR=$(git rev-parse --abbrev-ref HEAD)
+BRANCHES=$(git for-each-ref refs/heads/ --format='%(refname:short)')
+
+RED=$(tput setaf 1)
+GREEN=$(tput setaf 2)
+WHITE=$(tput setaf 7)
+RESET=$(tput sgr0)
+
+for branch in $BRANCHES
+do
+  if [ "$branch" == "$CUR" ]
+  then
+    echo -n "${GREEN}$branch${RESET} "
+  else
+    # Setting control codes here keeps the string length even for column
+    echo -n "${WHITE}$branch${RESET} "
+  fi
+  parent=$(git config branch.$branch.autorebaseparent)
+  if ! git show-ref --quiet $parent
+  then
+    parent=$(echo "${RED}${parent}${RESET}")
+  fi
+  echo "$parent"
+done | awk '{ printf "%-35s -> %s\n", $1, $2}'
