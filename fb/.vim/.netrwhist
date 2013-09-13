@@ -1,0 +1,9 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =7
+let g:netrw_dirhist_1='/data/users/sunjayc/www-git/flib/intern/site/x/memes'
+let g:netrw_dirhist_2='/data/users/sunjayc/www-git/flib/intern/site/x'
+let g:netrw_dirhist_3='/data/users/sunjayc/www-git/flib/intern/site'
+let g:netrw_dirhist_4='/data/users/sunjayc/www-git/flib/intern/site/web'
+let g:netrw_dirhist_5='/data/users/sunjayc/www-git/flib/intern/site/web/x'
+let g:netrw_dirhist_6='/data/users/sunjayc/www-git/flib/intern/site/web'
+let g:netrw_dirhist_7='/data/users/sunjayc/www-git/flib/intern/site/web/x'

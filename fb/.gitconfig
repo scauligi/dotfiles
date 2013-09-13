@@ -1,0 +1,16 @@
+[user]
+	name   = sunjayc
+	email  = sunjayc@fb.com
+
+[color]
+  ui     = auto
+
+[http]
+	proxy = fwdproxy.any.facebook.com:8080
+[log]
+	date = local
+[blame]
+	date = local
+[alias]
+	graph = log --decorate --all --graph trunk^..
+	sb = status -sb

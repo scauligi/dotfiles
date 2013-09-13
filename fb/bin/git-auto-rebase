@@ -1,0 +1,309 @@
+#!/bin/bash
+
+CACHE_DIR=.git/auto-rebase
+TODO=$CACHE_DIR/todo
+TODO_BACKUP=$CACHE_DIR/todo.backup
+COMPLETED=$CACHE_DIR/completed
+ORIGINAL_BRANCH=$CACHE_DIR/original_branch
+REF_NAMESPACE=refs/pre-auto-rebase
+
+print_help() {
+    echo "Usage:  git auto-rebase [opts]"
+    echo "Options:"
+    echo "    -n   dry run"
+    echo "    -c   continue previous auto-rebase"
+    echo "    -a   abort previous auto-rebase"
+    echo "         (leaves completed rebases intact)"
+}
+
+cleanup_autorebase() {
+    rm -rf $CACHE_DIR
+    if [ -n "$dry_run" ]; then
+        # The dry run should do nothing here. It doesn't create refs, and won't
+        # run unless auto-rebase is empty. Leave this here to catch programming
+        # errors, and for possible future -f option.
+        git for-each-ref --format="%(refname)" $REF_NAMESPACE |
+        while read ref; do
+            echo git update-ref -d $ref
+        done
+    else
+        git for-each-ref --format="%(refname)" $REF_NAMESPACE |
+        while read ref; do
+            git update-ref -d $ref
+        done
+    fi
+}
+
+# Get the rebase relationships from branch.*.autorebaseparent
+get_config_relationships() {
+    mkdir -p .git/auto-rebase
+    # We cannot simply read the indicated parents and blindly follow their
+    # instructions; they must form a directed acyclic graph (like git!) which
+    # furthermore has no sources with two sinks (i.e. a branch may not be
+    # rebased onto two others).
+    # 
+    # The awk script checks for cycles and double-parents, then sorts first by
+    # depth of hierarchy (how many parents it takes to get to a top-level
+    # parent), then by parent name. This means that all rebasing onto a given
+    # parent happens in a row - convenient for removal of cached refs.
+    IFS=$'\n'
+    git config --get-regexp 'branch\..+\.autorebaseparent' | \
+    awk '{
+        child=$1
+        sub("^branch[.]","",child)
+        sub("[.]autorebaseparent$","",child)
+        if (parent[child] != 0) {
+            print "Error: branch "child" has more than one parent specified."
+            error=1
+            exit 1
+        }
+        parent[child]=$2
+    }
+    END {
+        if ( error != 0 )
+            exit error
+        # check for cycles
+        for (child in parent) {
+            delete cache
+            depth=0
+            cache[child]=1
+            cur=child
+            while ( parent[cur] != 0 ) {
+                depth++
+                cur=parent[cur]
+                if ( cache[cur] != 0 ) {
+                    print "Error: cycle in branch."child".autorebaseparent hierarchy detected"
+                    exit 1
+                } else {
+                    cache[cur]=1
+                }
+            }
+            depths[child]=depth" "parent[child]" "child
+        }
+        n=asort(depths, children)
+        for (i=1; i<=n; i++) {
+            sub(".* ","",children[i])
+        }
+        for (i=1; i<=n; i++) {
+            if (parent[children[i]] != 0)
+                print parent[children[i]],children[i]
+        }
+    }' > $TODO
+
+    # Check for any errors. If the awk script's good, this should really check
+    # exit codes.
+    if grep -q '^Error:' $TODO; then
+        cat $TODO
+        rm -rf $CACHE_DIR
+        exit 1
+    fi
+
+    cp $TODO $TODO_BACKUP
+}
+
+# Get relationships from config, or if continuing, verify validity of cache
+get_relationships() {
+    if [ -n "$continue" ]; then
+        if [ ! -d $CACHE_DIR ]; then
+            echo "Error: You requested to continue a previous auto-rebase, but"
+            echo "$CACHE_DIR does not exist."
+            exit 1
+        fi
+        if [ -f $TODO -a -f $TODO_BACKUP -a -f $ORIGINAL_BRANCH ]; then
+            if ! cat $COMPLETED $TODO | diff - $TODO_BACKUP; then
+                echo "Error: You requested to continue a previous auto-rebase, but the cache appears"
+                echo "to be invalid (completed rebases + todo rebases != planned rebases)."
+                echo "You may attempt to manually continue from what is stored in $CACHE_DIR"
+                echo "or remove it with \"git auto-rebase -a\""
+                exit 1
+            fi
+        else
+            echo "Error: You requested to continue a previous auto-rebase, but some cached files"
+            echo "are missing."
+            echo "You may attempt to manually continue from what is stored in $CACHE_DIR"
+            echo "or remove it with \"git auto-rebase -a\""
+            exit 1
+        fi
+    elif [ -d $CACHE_DIR ]; then
+        echo "A previous auto-rebase appears to have been left unfinished."
+        echo "Either continue it with \"git auto-rebase -c\" or remove the cache with"
+        echo "\"git auto-rebase -a\""
+        exit 1
+    else
+        get_config_relationships
+    fi
+}
+
+# Verify that desired branches exist, and pre-refs do not.
+check_ref_existence() {
+    local parent child
+    for pair in "${pairs[@]}"; do
+        parent="${pair% *}"
+        if ! git show-ref -q --verify "refs/heads/$parent" > /dev/null ; then
+            if ! git show-ref -q --verify "refs/remotes/$parent" > /dev/null; then
+                child="${pair#* }"
+                echo "Error: specified parent branch $parent of branch $child does not exist"
+                exit 1
+            fi
+        fi
+        if [ -z "$continue" ]; then
+            if git show-ref -q --verify "$REF_NAMESPACE/$parent" > /dev/null; then
+                echo "Error: ref $REF_NAMESPACE/$parent already exists"
+                echo "Most likely a previous git-auto-rebase did not complete; if you have fixed all"
+                echo "necessary rebases, you may try again after removing it with:"
+                echo
+                echo "git update-ref -d $REF_NAMESPACE/$parent"
+                echo
+                exit 1
+            fi
+        else
+            if ! git show-ref -q --verify "$REF_NAMESPACE/$parent" > /dev/null; then
+                echo "Error: You requested to continue a previous auto-rebase, but the required"
+                echo "cached ref $REF_NAMESPACE/$parent is missing."
+                echo "You may attempt to manually continue from the contents of $CACHE_DIR"
+                echo "and whatever refs in refs/$REF_NAMESPACE still exist, or abort the previous"
+                echo "auto-rebase with \"git auto-rebase -a\""
+                exit 1
+            fi
+        fi
+    done
+}
+
+# Create the pre-refs, storing original position of rebased parents
+create_pre_refs() {
+    local parent prev_parent
+    for pair in "${pairs[@]}"; do
+        parent="${pair% *}"
+        if [ "$prev_parent" != "$parent" ]; then
+            if [ -n "$dry_run" ]; then
+                echo git update-ref "$REF_NAMESPACE/$parent" "$parent" \"\"
+            else
+                if ! git update-ref "$REF_NAMESPACE/$parent" "$parent" ""; then
+                    echo "Error: cannot create ref $REF_NAMESPACE/$parent"
+                    exit 1
+                fi
+            fi
+        fi
+
+        prev_parent="$parent"
+    done
+}
+
+# Perform the rebases, updating todo/completed as we go
+perform_rebases() {
+    local prev_parent parent child
+    for pair in "${pairs[@]}"; do
+        parent="${pair% *}"
+        child="${pair#* }"
+
+        # We do this *before* rebasing, assuming most likely any failures will be
+        # fixed with rebase --continue, and therefore should not be attempted again
+        head -n 1 $TODO >> $COMPLETED
+        sed -i '1d' $TODO
+
+        if [ -n "$dry_run" ]; then
+            echo git rebase --onto "$parent" "$REF_NAMESPACE/$parent" "$child"
+            echo "Successfully rebased $child onto $parent"
+        else
+            echo git rebase --onto "$parent" "$REF_NAMESPACE/$parent" "$child"
+            if ( git merge-ff -q "$child" "$parent" 2> /dev/null && echo "Fast-forwarded $child to $parent." ) || \
+                git rebase --onto "$parent" "$REF_NAMESPACE/$parent" "$child"; then
+                echo "Successfully rebased $child onto $parent"
+            else
+                echo "Error rebasing $child onto $parent."
+                echo 'You should either fix it (end with git rebase --continue) or abort it, then use'
+                echo '"git auto-rebase -c" to continue. You may also use "git auto-rebase -a" to'
+                echo 'abort the auto-rebase. Note that this will not undo already-completed rebases.'
+                exit 1
+            fi
+        fi
+
+        prev_parent="$parent"
+    done
+}
+
+rebase_all_intelligent() {
+    if ! git rev-parse --show-git-dir &> /dev/null; then
+        echo "Error: git-auto-rebase must be run from inside a git repository"
+        exit 1
+    fi
+
+    SUBDIRECTORY_OK=1
+    . "$(git --exec-path | sed 's/:/\n/' | grep -m 1 git-core)"/git-sh-setup
+    cd_to_toplevel
+
+
+    # Figure out what we need to do (continue, or read from config)
+    get_relationships
+
+    # Read the resulting todo list
+    OLDIFS="$IFS"
+    IFS=$'\n'
+    pairs=($(cat $TODO))
+    IFS="$OLDIFS"
+
+    # Store the original branch
+    if [ -z "$continue" ]; then
+        git symbolic-ref HEAD | sed 's@refs/heads/@@' > $ORIGINAL_BRANCH
+    fi
+
+    check_ref_existence
+    # These three depend on the pairs array
+    if [ -z "$continue" ]; then
+        create_pre_refs
+    fi
+    perform_rebases
+
+    echo "Returning to original branch"
+    if [ -n "$dry_run" ]; then
+        echo git checkout $(cat $ORIGINAL_BRANCH)
+    else
+        git checkout $(cat $ORIGINAL_BRANCH) > /dev/null
+    fi
+
+    if diff -q $COMPLETED $TODO_BACKUP ; then
+        if [ "$(wc -l $TODO | cut -d" " -f1)" -eq 0 ]; then
+            cleanup_autorebase
+            echo "Auto-rebase complete"
+        else
+            echo "Error: todo-rebases not empty, but completed and planned rebases match."
+            echo "This should not be possible, unless you hand-edited a cached file."
+            echo "Examine $TODO, $TODO_BACKUP, and $COMPLETED to determine what went wrong."
+            exit 1
+        fi
+    else
+        echo "Error: completed rebases don't match planned rebases."
+        echo "Examine $TODO_BACKUP and $COMPLETED to determine what went wrong."
+        exit 1
+    fi
+}
+
+
+while getopts "nca" opt; do
+    case $opt in
+        n ) dry_run=1;;
+        c ) continue=1;;
+        a ) abort=1;;
+        * )
+            echo "git-auto-rebase is too dangerous to run with invalid options; exiting"
+            print_help
+            exit 1
+    esac
+done
+shift $((OPTIND-1))
+
+
+case $# in
+    0 )
+        if [ -n "$abort" ]; then
+            cleanup_autorebase
+        else
+            rebase_all_intelligent
+        fi
+        ;;
+
+    * )
+        print_help
+        exit 1
+        ;;
+esac
