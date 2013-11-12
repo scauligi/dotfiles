@@ -27,6 +27,11 @@ nmap ,O O<Esc>O
 map Y y$
 vmap s :s
 
+nmap <C-h> <C-w>h
+nmap <C-j> <C-w>j
+nmap <C-k> <C-w>k
+nmap <C-l> <C-w>l
+
 nmap QQ :confirm quitall<CR>
 nmap QW :confirm wqall<CR>
 
