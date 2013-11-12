@@ -1,3 +1,6 @@
+[user]
+	name   = sunjayc
+	email  = sunjayc@cs.washington.edu
 [color]
 	diff = auto
 	ui = auto
@@ -8,3 +11,5 @@
 [alias]
 	graph = log --decorate --all --graph
 	sb = status -sb
+[push]
+	default = simple
