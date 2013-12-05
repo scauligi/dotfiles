@@ -1,5 +1,5 @@
 set nocompatible
-call pathogen#infect()
+"call pathogen#infect()
 
 syntax on
 
@@ -35,11 +35,7 @@ nmap <C-l> <C-w>l
 nmap QQ :confirm quitall<CR>
 nmap QW :confirm wqall<CR>
 
-if exists('+colorcolumn')
-  set colorcolumn=80
-else
-  au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
-endif
+au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
 
 if has("autocmd")
   filetype plugin indent on
