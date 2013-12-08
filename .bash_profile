@@ -17,3 +17,7 @@ export PATH
 export LD_LIBRARY_PATH
 export EDITOR
 
+if [ -z "$TMUX" ]; then
+  tmux list-sessions 2>/dev/null
+fi
+
