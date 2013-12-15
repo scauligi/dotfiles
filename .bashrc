@@ -8,6 +8,7 @@ if [ -f /etc/bashrc ]; then
 fi
 
 # User specific aliases and functions
+alias abstract='cd /homes/abstract/sunjayc/public_html'
 alias sml='rlwrap sml'
 alias racket='rlwrap racket'
 alias ssh-start='exec ssh-agent bash'
