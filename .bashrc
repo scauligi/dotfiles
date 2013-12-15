@@ -9,6 +9,7 @@ fi
 
 # User specific aliases and functions
 alias sml='rlwrap sml'
+alias racket='rlwrap racket'
 alias ssh-start='exec ssh-agent bash'
 alias cdiff='diff_helper'
 alias resume='vi -S $(git rev-parse --abbrev-ref HEAD).vim'
