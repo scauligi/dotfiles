@@ -36,7 +36,7 @@ nmap QQ :confirm quitall<CR>
 nmap QW :confirm wqall<CR>
 
 "au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
-command -nargs=0 NoHighlight :call matchdelete(w:m2)
+"command -nargs=0 NoHighlight :call matchdelete(w:m2)
 
 if has("autocmd")
   filetype plugin indent on
