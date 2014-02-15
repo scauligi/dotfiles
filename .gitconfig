@@ -1,6 +1,6 @@
-[user]
-	name   = sunjayc
-	email  = sunjayc@cs.washington.edu
+#[user]
+#	name   = sunjayc
+#	email  = sunjayc@cs.washington.edu
 [color]
 	diff = auto
 	ui = auto

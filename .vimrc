@@ -42,10 +42,3 @@ if has("autocmd")
   filetype plugin indent on
 endif
 
-" This needs to be split out
-augroup filetype
-  au BufRead,BufNewFile *.flex,*.jflex set filetype=jflex
-  au BufRead,BufNewFile *.cup set filetype=cup
-augroup END
-au Syntax jflex so ~/.vim/syntax/jflex.vim
-command -nargs=0 AntMake :set efm=%A\ %#[javac]\ %f:%l:\ %m,%-Z\ %#[javac]\ %p^,%-C%.%#

@@ -8,10 +8,6 @@ if [ -f /etc/bashrc ]; then
 fi
 
 # User specific aliases and functions
-alias abstract='cd /homes/abstract/sunjayc/public_html'
-alias tasks='vi /homes/abstract/sunjayc/public_html/txt_scripts/tasks.txt'
-alias sml='rlwrap sml'
-alias racket='rlwrap racket'
 alias ssh-start='exec ssh-agent bash'
 alias resume='vi -S $(git rev-parse --abbrev-ref HEAD).vim'
 alias gg='git graph --oneline --name-status'
@@ -28,14 +24,6 @@ function crontab() {
 
 function mkd() {
   mkdir -vp "$@" && cd $_
-}
-
-function findtmux() {
-  for attu in attu1 attu2 attu3 attu4
-  do
-    echo $attu:
-    ssh $attu "~/bin/tmux list-sessions" 2>/dev/null
-  done
 }
 
 function cdiff() {
