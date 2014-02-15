@@ -21,6 +21,8 @@ command -nargs=0 -count Spaces :let &tabstop=(<count> ? <count> : 2) | let &shif
 command -nargs=0 -count Tabs   :let &tabstop=(<count> ? <count> : 4) | let &shiftwidth=(<count> ? <count> : 4) | set noexpandtab
 Spaces 2
 
+cabbrev make set cmdheight=2 \| make \| set cmdheight=1
+
 nmap , ,,
 nmap ,o o<CR>
 nmap ,O O<Esc>O
