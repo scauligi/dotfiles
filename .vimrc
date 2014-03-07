@@ -23,7 +23,7 @@ Spaces 2
 
 cabbrev make set cmdheight=2 \| make \| set cmdheight=1
 
-nmap , ,,
+nnoremap ,, ,
 nmap ,o o<CR>
 nmap ,O O<Esc>O
 map Y y$
@@ -34,6 +34,10 @@ nmap <C-j> <C-w>j
 nmap <C-k> <C-w>k
 nmap <C-l> <C-w>l
 
+nmap <C-N> :next<CR>
+nmap <C-P> :prev<CR>
+
+nmap <C-Q> :q<CR>
 nmap QQ :confirm quitall<CR>
 nmap QW :confirm wqall<CR>
 
