@@ -48,3 +48,5 @@ if has("autocmd")
   filetype plugin indent on
 endif
 
+command -nargs=0 AntMake :set efm=%A\ %#[javac]\ %f:%l:\ %m,%-Z\ %#[javac]\ %p^,%-C%.%# | set makeprg=ant\ compile
+command -nargs=0 Javac :set makeprg=javac\ *.java
