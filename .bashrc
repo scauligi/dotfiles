@@ -7,6 +7,9 @@ if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
 
+# Prevent PuTTY's (and possibly others') CTRL-S/CTRL-Q flow control
+stty ixany -ixoff -ixon
+
 # User specific aliases and functions
 alias ssh-start='exec ssh-agent bash'
 alias resume='vi -S $(git rev-parse --abbrev-ref HEAD).vim'
@@ -63,4 +66,5 @@ function yesno()
   fi
   return 1
 }
+
 
