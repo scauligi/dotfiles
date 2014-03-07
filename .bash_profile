@@ -26,5 +26,8 @@ export FIGNORE
 
 if [ -z "$TMUX" ]; then
   tmux list-sessions 2>/dev/null
+  if [ "$HOSTNAME" == "agk.cs.washington.edu" ]; then
+    tmux attach -t irssi
+  fi
 fi
 

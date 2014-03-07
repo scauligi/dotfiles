@@ -21,6 +21,14 @@ alias gg='git graph --oneline --name-status'
 alias qcc='gcc -Wall -g -std=gnu99'
 alias q++='g++ -Wall -g -std=gnu++11'
 
+function cal() {
+  pushd /homes/abstract/sunjayc/public_html/calendar/inputFiles
+  vi schedule.ini
+  cd ..
+  ./createcal/createcal
+  popd
+}
+
 function crontab() {
   if [ $# -eq 0 ]; then
     echo "no"
