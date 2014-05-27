@@ -12,6 +12,11 @@ if [ -d $HOME/.bash.d ]; then
   done
 fi
 
+shopt -s checkwinsize
+
+# Prevent PuTTY's (and possibly others') CTRL-S/CTRL-Q flow control
+stty ixany -ixoff -ixon
+
 # User specific aliases and functions
 alias ssh-start='SSH_BASH=1 exec ssh-agent bash -l'
 alias resume='vi -S $(git rev-parse --abbrev-ref HEAD).vim'
