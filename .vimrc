@@ -21,7 +21,7 @@ command -nargs=0 -count Spaces :let &tabstop=(<count> ? <count> : 2) | let &shif
 command -nargs=0 -count Tabs   :let &tabstop=(<count> ? <count> : 4) | let &shiftwidth=(<count> ? <count> : 4) | set noexpandtab
 Spaces 2
 
-cabbrev make set cmdheight=2 \| make \| set cmdheight=1
+command -nargs=* Make execute 'silent make <args>' | redraw! | cc
 
 nnoremap ,, ,
 nmap ,o o<CR>
