@@ -1,10 +1,8 @@
 # .bashrc
 
-# User specific aliases and functions
-
 # Source global definitions
 if [ -f /etc/bashrc ]; then
-	. /etc/bashrc
+  . /etc/bashrc
 fi
 
 # Source local definitions
@@ -15,7 +13,7 @@ if [ -d $HOME/.bash.d ]; then
 fi
 
 # User specific aliases and functions
-alias ssh-start='exec ssh-agent bash'
+alias ssh-start='SSH_BASH=1 exec ssh-agent bash -l'
 alias resume='vi -S $(git rev-parse --abbrev-ref HEAD).vim'
 alias gg='git graph --oneline --name-status'
 alias qcc='gcc -Wall -g -std=gnu99'
