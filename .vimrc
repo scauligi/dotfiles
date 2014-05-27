@@ -1,5 +1,28 @@
 set nocompatible
-"call pathogen#infect()
+
+" Vundle config section
+filetype off
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" Let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
+
+Plugin 'kana/vim-fakeclip'
+Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-obsession'
+Plugin 'tpope/vim-repeat'
+Plugin 'tpope/vim-speeddating'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-unimpaired'
+Plugin 'tpope/vim-vinegar'
+Plugin 'ciaranm/detectindent'
+
+call vundle#end()
+filetype plugin indent on
+
+" END Vundle config section
 
 syntax on
 
@@ -43,10 +66,6 @@ nmap QW :confirm wqall<CR>
 
 "au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
 "command -nargs=0 NoHighlight :call matchdelete(w:m2)
-
-if has("autocmd")
-  filetype plugin indent on
-endif
 
 " This needs to be split out
 augroup filetype
