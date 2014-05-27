@@ -9,6 +9,7 @@ call vundle#begin()
 " Let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 
+Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'kana/vim-fakeclip'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-obsession'
