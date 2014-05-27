@@ -1,23 +1,29 @@
 # .bashrc
 
-# User specific aliases and functions
-
 # Source global definitions
 if [ -f /etc/bashrc ]; then
-	. /etc/bashrc
+  . /etc/bashrc
 fi
+
+# User specific aliases and functions
 
 # Source local definitions
 for i in $HOME/.bash.d/*; do
   . "$i"
 done
 
+shopt -s checkwinsize
+
+ATTU="attu1 attu2 attu3 attu4"
+MACHINES=$(cat $HOME/goodmac.txt)
+
 # User specific aliases and functions
+alias w451='cd /cse/web/courses/cse451/14sp'
 alias abstract='cd /homes/abstract/sunjayc/public_html'
 alias tasks='vi /homes/abstract/sunjayc/public_html/txt_scripts/tasks.txt'
 alias sml='rlwrap sml'
 alias racket='rlwrap racket'
-alias ssh-start='exec ssh-agent bash'
+alias ssh-start='SSH_BASH=1 exec ssh-agent bash -l'
 alias resume='vi -S $(git rev-parse --abbrev-ref HEAD).vim'
 alias gg='git graph --oneline --name-status'
 alias qcc='gcc -Wall -g -std=gnu99'
@@ -48,10 +54,18 @@ function mkd() {
 }
 
 function findtmux() {
-  for attu in attu1 attu2 attu3 attu4
+  for attu in $ATTU
   do
     echo $attu:
-    ssh $attu "~/bin/tmux list-sessions" 2>/dev/null
+    ssh $attu "~/bin/tmux list-sessions" 2>/dev/null | sed 's/^/  /'
+  done
+}
+
+function findtmuxall() {
+  for machine in $MACHINES
+  do
+    echo $machine:
+    ssh -o ConnectTimeout=1 $machine "~/bin/tmux list-sessions" 2>/dev/null | sed 's/^/  /'
   done
 }
 
