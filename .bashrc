@@ -5,6 +5,15 @@ if [ -f /etc/bashrc ]; then
   . /etc/bashrc
 fi
 
+# If not running interactively, don't do anything
+case $- in
+  *i*) ;;
+    *) return;;
+esac
+
+
+# User specific aliases and functions
+
 # Source local definitions
 if [ -d $HOME/.bash.d ]; then
   for i in $HOME/.bash.d/*; do
