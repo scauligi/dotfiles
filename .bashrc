@@ -8,9 +8,11 @@ if [ -f /etc/bashrc ]; then
 fi
 
 # Source local definitions
-for i in $HOME/.bash.d/*; do
-  . "$i"
-done
+if [ -d $HOME/.bash.d ]; then
+  for i in $HOME/.bash.d/*; do
+    . "$i"
+  done
+fi
 
 # User specific aliases and functions
 alias ssh-start='exec ssh-agent bash'
