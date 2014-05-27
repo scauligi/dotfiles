@@ -22,6 +22,15 @@ shopt -s checkwinsize
 # Prevent PuTTY's (and possibly others') CTRL-S/CTRL-Q flow control
 stty ixany -ixoff -ixon
 
+# Aliases stolen from CSE
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias grep='grep --color=auto'
+alias l.='ls -d .* --color=auto'
+alias ll='ls -l --color=auto'
+alias ls='ls --color=auto'
+alias vi='vim'
+alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
 # User specific aliases and functions
 alias w451='cd /cse/web/courses/cse451/14sp'
 alias abstract='cd /homes/abstract/sunjayc/public_html'
