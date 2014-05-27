@@ -17,6 +17,11 @@ shopt -s checkwinsize
 ATTU="attu1 attu2 attu3 attu4"
 MACHINES=$(cat $HOME/goodmac.txt)
 
+shopt -s checkwinsize
+
+# Prevent PuTTY's (and possibly others') CTRL-S/CTRL-Q flow control
+stty ixany -ixoff -ixon
+
 # User specific aliases and functions
 alias w451='cd /cse/web/courses/cse451/14sp'
 alias abstract='cd /homes/abstract/sunjayc/public_html'
