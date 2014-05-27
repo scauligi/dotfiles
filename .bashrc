@@ -5,6 +5,13 @@ if [ -f /etc/bashrc ]; then
   . /etc/bashrc
 fi
 
+# If not running interactively, don't do anything
+case $- in
+  *i*) ;;
+    *) return;;
+esac
+
+
 # User specific aliases and functions
 
 # Source local definitions
@@ -16,8 +23,6 @@ shopt -s checkwinsize
 
 ATTU="attu1 attu2 attu3 attu4"
 MACHINES=$(cat $HOME/goodmac.txt)
-
-shopt -s checkwinsize
 
 # Prevent PuTTY's (and possibly others') CTRL-S/CTRL-Q flow control
 stty ixany -ixoff -ixon
