@@ -49,3 +49,4 @@ if [ -z "$TMUX" ]; then
   tmux attach -t irssi 2>/dev/null
 fi
 
+eval `perl -I ~/perl5/lib/perl5 -Mlocal::lib`
