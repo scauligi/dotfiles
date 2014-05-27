@@ -19,6 +19,9 @@ FIGNORE=.class:$FIGNORE
 
 shopt -s checkwinsize
 
+# Prevent PuTTY's (and possibly others') CTRL-S/CTRL-Q flow control
+stty ixany -ixoff -ixon
+
 export PATH
 export LD_LIBRARY_PATH
 export EDITOR

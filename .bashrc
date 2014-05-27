@@ -7,8 +7,10 @@ if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
 
-# Prevent PuTTY's (and possibly others') CTRL-S/CTRL-Q flow control
-stty ixany -ixoff -ixon
+# Source local definitions
+for i in $HOME/.bash.d/*; do
+  . "$i"
+done
 
 # User specific aliases and functions
 alias ssh-start='exec ssh-agent bash'
@@ -16,6 +18,10 @@ alias resume='vi -S $(git rev-parse --abbrev-ref HEAD).vim'
 alias gg='git graph --oneline --name-status'
 alias qcc='gcc -Wall -g -std=gnu99'
 alias q++='g++ -Wall -g -std=gnu++11'
+
+function grepl() {
+  grep "$@" --color=always | less -R
+}
 
 function crontab() {
   if [ $# -eq 0 ]; then
