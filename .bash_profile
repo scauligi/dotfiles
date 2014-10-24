@@ -19,7 +19,7 @@ export SOURCED_BASH_PROFILE=yes
 
 # User specific environment and startup programs
 
-PATH=$PATH:$HOME/bin:/projects/instr/14sp/cse451/tools/bin
+PATH=$PATH:$HOME/bin:/projects/instr/14au/cse451/tools/bin
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/lib
 if [ -z "$MANPATH" ]; then
   MANPATH=$(manpath):$HOME/man

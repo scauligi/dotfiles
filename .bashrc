@@ -37,11 +37,11 @@ alias ls='ls --color=auto'
 alias vi='vim'
 alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
 # User specific aliases and functions
-alias w451='cd /cse/web/courses/cse451/14sp'
+alias w451='cd /cse/web/courses/cse451/14au'
+alias p451='cd /projects/instr/14au/cse451'
 alias abstract='cd /homes/abstract/sunjayc/public_html'
-alias tasks='vi /homes/abstract/sunjayc/public_html/txt_scripts/tasks.txt'
+alias tasks='cd /homes/abstract/sunjayc/public_html/calendar/tasklist && ls'
 alias sml='rlwrap sml'
-alias racket='rlwrap racket'
 alias ssh-start='SSH_BASH=1 exec ssh-agent bash -l'
 alias resume='vi -S $(git rev-parse --abbrev-ref HEAD).vim'
 alias gg='git graph --oneline --name-status'
@@ -49,14 +49,13 @@ alias qcc='gcc -Wall -g -std=gnu99'
 alias q++='g++ -Wall -g -std=gnu++11'
 
 function grepl() {
-  grep "$@" --color=always | less -R
+  grep --color=always --exclude=tags --exclude=cscope.out "$@" | less -R
 }
 
 function cal() {
-  pushd /homes/abstract/sunjayc/public_html/calendar/inputFiles
-  vi schedule.ini
-  cd ..
-  ./createcal/createcal
+  pushd /homes/abstract/sunjayc/public_html/calendar/newcal
+  vi events.ini
+  ./htmlmaker.py
   popd
 }
 
@@ -70,6 +69,7 @@ function crontab() {
 
 function mkd() {
   mkdir -vp "$@" && cd $_
+  echo "Entered directory $_"
 }
 
 function findtmux() {
@@ -125,5 +125,3 @@ function yesno()
   fi
   return 1
 }
-
-
