@@ -32,23 +32,34 @@ syntax on
 highlight StatusLine   term=bold,reverse cterm=NONE ctermbg=Blue ctermfg=LightGray
 highlight StatusLineNC term=reverse cterm=NONE ctermbg=Blue ctermfg=DarkGray
 
+set backspace=indent,eol,start
+set directory=~/.vim/swap//,.
 set laststatus=2
-set smarttab autoindent
-set listchars=tab:\|\ ,trail:·
 set list
+set listchars=tab:\|\ ,trail:·
 set nohlsearch
 set noincsearch
-set wildmenu
-set wildmode=longest,list,full
-set ttimeoutlen=100
-set showcmd
-set backspace=indent,eol,start
+set path+=**
 set ruler
 set scrolloff=5
-set switchbuf=usetab
+set showcmd
+set smarttab autoindent
 set splitright splitbelow
-set directory=~/.vim/swap//,.
+set switchbuf=usetab
+set ttimeoutlen=100
+set wildmenu
+set wildmode=longest,list,full
 
+set cscopetag
+set cscopetagorder=0
+set nocsverb
+" add any database in current directory
+if filereadable("cscope.out")
+  cs add $PWD/cscope.out
+" else add database pointed to by environment
+elseif $CSCOPE_DB != ""
+  cs add $CSCOPE_DB
+endif
 map g<C-]> :cs find 3 <C-R>=expand("<cword>")<CR><CR>
 map g<C-\> :cs find 0 <C-R>=expand("<cword>")<CR><CR>
 
