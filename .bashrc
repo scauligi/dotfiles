@@ -35,6 +35,7 @@ alias ll='ls -l --color=auto'
 alias ls='ls --color=auto'
 alias vi='vim'
 alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
+
 # User specific aliases and functions
 alias ssh-start='SSH_BASH=1 exec ssh-agent bash -l'
 alias resume='vi -S $(git rev-parse --abbrev-ref HEAD).vim'
@@ -43,7 +44,7 @@ alias qcc='gcc -Wall -g -std=gnu99'
 alias q++='g++ -Wall -g -std=gnu++11'
 
 function grepl() {
-  grep "$@" --color=always | less -R
+  grep --color=always --exclude=tags --exclude=cscope.out "$@" | less -R
 }
 
 function crontab() {
@@ -56,6 +57,7 @@ function crontab() {
 
 function mkd() {
   mkdir -vp "$@" && cd $_
+  echo "Entered directory $_"
 }
 
 function cdiff() {
@@ -95,5 +97,3 @@ function yesno()
   fi
   return 1
 }
-
-

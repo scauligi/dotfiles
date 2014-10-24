@@ -11,5 +11,10 @@
 [alias]
 	graph = log --decorate --all --graph
 	sb = status -sb
+	lg = log --graph --branches --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 [push]
 	default = simple
+[core]
+	excludesfile = /homes/iws/sunjayc/.gitignore
+[merge]
+	conflictstyle = diff3
