@@ -12,6 +12,7 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'AndrewRadev/linediff.vim'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'ciaranm/detectindent'
+Plugin 'jnwhiteh/vim-golang'
 Plugin 'kana/vim-fakeclip'
 Plugin 'tpope/vim-eunuch'
 Plugin 'tpope/vim-fugitive'
@@ -90,6 +91,9 @@ nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
 nmap <C-Q> :q<CR>
 nmap QQ :confirm quitall<CR>
 nmap QW :confirm wqall<CR>
+
+autocmd FileType go autocmd BufWritePre <buffer> Fmt
+let g:gofmt_command = "goimports"
 
 nmap <C-S> <C-A>
 

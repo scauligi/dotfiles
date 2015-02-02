@@ -11,6 +11,7 @@
 [alias]
 	graph = log --decorate --all --graph
 	sb = status -sb
+	gg = log --decorate --all --graph --oneline --name-status
 	lg = log --graph --branches --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 [push]
 	default = simple

@@ -40,7 +40,7 @@ alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --show-ti
 alias ssh-start='SSH_BASH=1 exec ssh-agent bash -l'
 alias resume='vi -S $(git rev-parse --abbrev-ref HEAD).vim'
 alias gg='git graph --oneline --name-status'
-alias qcc='gcc -Wall -g -std=gnu99'
+alias qcc='gcc -Wall -g -std=c11'
 alias q++='g++ -Wall -g -std=gnu++11'
 
 function grepl() {
