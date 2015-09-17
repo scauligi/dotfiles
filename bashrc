@@ -43,6 +43,15 @@ alias gg='git graph --oneline --name-status'
 alias qcc='gcc -Wall -g -std=c11'
 alias q++='g++ -Wall -g -std=gnu++11'
 
+function poff() {
+  export PROMPT_COMMAND=''
+  export PS1='[\u@\h \W]$ '
+}
+
+function pon() {
+  export PROMPT_COMMAND='__git_ps1 "[" "\u@\h \W]$ " "%s "'
+}
+
 function grepl() {
   grep --color=always --exclude=tags --exclude=cscope.out "$@" | less -R
 }
