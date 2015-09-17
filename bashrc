@@ -70,7 +70,7 @@ function mkd() {
 }
 
 function cdiff() {
-  colordiff "$@" | less -R
+  colordiff -u "$@" | less -R
 }
 
 function catf() {
