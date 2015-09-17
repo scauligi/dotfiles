@@ -37,7 +37,7 @@ set backspace=indent,eol,start
 set directory=~/.vim/swap//,.
 set laststatus=2
 set list
-set listchars=tab:\|\ ,trail:·
+set listchars=tab:\|\ ,trail:·,extends:>,precedes:<
 set nohlsearch
 set noincsearch
 set path+=**
