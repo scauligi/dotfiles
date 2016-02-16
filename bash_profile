@@ -5,17 +5,6 @@ if [ -f ~/.bashrc ]; then
   . ~/.bashrc
 fi
 
-if [ "$SSH_BASH" == "1" ]; then
-  ssh-add
-  export SSH_BASH=0
-fi
-
-# If we've already sourced this file, exit now
-if [ -v SOURCED_BASH_PROFILE ]; then
-  return
-fi
-export SOURCED_BASH_PROFILE=yes
-
 
 # User specific environment and startup programs
 

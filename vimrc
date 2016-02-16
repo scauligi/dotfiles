@@ -33,6 +33,8 @@ syntax on
 highlight StatusLine   term=bold,reverse cterm=NONE ctermbg=Blue ctermfg=LightGray
 highlight StatusLineNC term=reverse cterm=NONE ctermbg=Blue ctermfg=DarkGray
 
+set autoindent
+set background=dark
 set backspace=indent,eol,start
 set directory=~/.vim/swap//,.
 set laststatus=2
@@ -44,8 +46,9 @@ set path+=**
 set ruler
 set scrolloff=5
 set showcmd
-set smarttab autoindent
-set splitright splitbelow
+set smarttab
+set splitbelow
+set splitright
 set switchbuf=usetab
 set ttimeoutlen=100
 set wildmenu
@@ -100,7 +103,4 @@ nmap <Left> <C-W><
 nmap <Right> <C-W>>
 
 "set colorcolumn=81
-"highlight ColorColumn  ctermbg=darkblue
-
-command -nargs=0 AntMake :set efm=%A\ %#[javac]\ %f:%l:\ %m,%-Z\ %#[javac]\ %p^,%-C%.%# | set makeprg=ant\ compile
-command -nargs=0 Javac :set makeprg=javac\ *.java
+highlight ColorColumn ctermbg=darkblue

@@ -3,12 +3,31 @@
 FILES="bash_logout bash_profile bashrc gitconfig gitignore tmux.conf vimrc"
 DIRS="bash.d"
 REPO=$PWD
-mkdir -p old
-cd $HOME
+OLD=`mktemp -d $PWD/oldXXX`
+
+function yesno() {
+  read -p "$1 (Y/n): " -r
+  # bash return doesn't allow boolean zen :(
+  if [[ $REPLY =~ ^[Nn] ]]
+  then
+    return 1
+  fi
+  return 0
+}
 
 for f in $FILES $DIRS; do
-  mv -v .$f $REPO/old/$f
+  mv -v $HOME/.$f $OLD/$f
 done
 for f in $FILES $DIRS; do
-  ln -s $REPO/$f .$f
+  ln -s $REPO/$f $HOME/.$f
 done
+
+mkdir -v -p $HOME/.vim/swap
+if [ ! -d $HOME/.vim/bundle/Vundle.vim ]
+then
+  if yesno "Download Vundle.vim?"
+  then
+    git clone https://github.com/gmarik/Vundle.vim $HOME/.vim/bundle/Vundle.vim
+  fi
+  yesno "Install vim bundles?" && vim +PluginInstall +qall
+fi

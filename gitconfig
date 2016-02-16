@@ -1,6 +1,6 @@
-#[user]
-#	name   = sunjayc
-#	email  = sunjayc@cs.washington.edu
+[user]
+#	name   = scauligi
+#	email  = scauligi@eng.ucsd.edu
 [color]
 	diff = auto
 	ui = auto
@@ -16,6 +16,6 @@
 [push]
 	default = simple
 [core]
-	excludesfile = /homes/iws/sunjayc/.gitignore
+	excludesfile = $HOME/.gitignore
 [merge]
 	conflictstyle = diff3
