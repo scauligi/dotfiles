@@ -1,6 +1,6 @@
 [user]
-#	name   = scauligi
-#	email  = scauligi@eng.ucsd.edu
+	name   = <<NAME>>
+	email  = <<EMAIL>>
 [color]
 	diff = auto
 	ui = auto
@@ -16,6 +16,6 @@
 [push]
 	default = simple
 [core]
-	excludesfile = $HOME/.gitignore
+	excludesfile = <<HOME>>/.gitignore
 [merge]
 	conflictstyle = diff3

@@ -15,6 +15,12 @@ function yesno() {
   return 0
 }
 
+read -p "Name: " -r
+sed -i "s/<<NAME>>/$(echo $REPLY | sed -e 's/[\/&]/\\&/g')/" gitconfig
+read -p "Email: " -r
+sed -i "s/<<EMAIL>>/$(echo $REPLY | sed -e 's/[\/&]/\\&/g')/" gitconfig
+sed -i "s/<<HOME>>/$(echo $HOME | sed -e 's/[\/&]/\\&/g')/" gitconfig
+
 for f in $FILES $DIRS; do
   mv -v $HOME/.$f $OLD/$f
 done
