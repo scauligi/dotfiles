@@ -9,10 +9,11 @@
 [blame]
 	date = local
 [alias]
-	graph = log --decorate --all --graph
-	sb = status -sb
+	co = checkout
 	gg = log --decorate --all --graph --oneline --name-status
+	graph = log --decorate --all --graph
 	lg = log --graph --branches --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	sb = status -sb
 [push]
 	default = simple
 [core]
