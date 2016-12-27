@@ -9,7 +9,14 @@
 [blame]
 	date = local
 [alias]
+	b = branch
+	cm = commit
 	co = checkout
+	d = diff
+	f = fetch
+	h = push
+	l = pull
+	r = rebase
 	gg = log --decorate --all --graph --oneline --name-status
 	graph = log --decorate --all --graph
 	lg = log --graph --branches --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
