@@ -16,6 +16,7 @@
 	f = fetch
 	h = push
 	l = pull
+	lr = pull --rebase
 	r = rebase
 	gg = log --decorate --all --graph --oneline --name-status
 	graph = log --decorate --all --graph
