@@ -12,7 +12,6 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'AndrewRadev/linediff.vim'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'ciaranm/detectindent'
-Plugin 'fatih/vim-go'
 Plugin 'kana/vim-fakeclip'
 Plugin 'tpope/vim-eunuch'
 Plugin 'tpope/vim-fugitive'
@@ -22,6 +21,7 @@ Plugin 'tpope/vim-speeddating'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'tpope/vim-vinegar'
+Plugin 'vim-scripts/VisIncr'
 
 call vundle#end()
 filetype plugin indent on
@@ -64,7 +64,9 @@ if filereadable("cscope.out")
 elseif $CSCOPE_DB != ""
   cs add $CSCOPE_DB
 endif
+" find functions calling this function
 map g<C-]> :cs find 3 <C-R>=expand("<cword>")<CR><CR>
+" find this C symbol
 map g<C-\> :cs find 0 <C-R>=expand("<cword>")<CR><CR>
 
 command -nargs=0 -count Spaces :let &tabstop=(<count> ? <count> : 2) | let &shiftwidth=(<count> ? <count> : 2) | set expandtab
@@ -84,6 +86,11 @@ vmap s :s
 nmap <C-N> :next<CR>
 nmap <C-P> :prev<CR>
 
+let g:unimpaired_swap_option_switches = 1
+nnoremap ]oa :set formatoptions+=a<CR>
+nnoremap [oa :set formatoptions-=a<CR>
+nnoremap coa :set <C-R>=(&formatoptions =~# "a") ? 'formatoptions-=a' : 'formatoptions+=a'<CR><CR>
+
 let g:tmux_navigator_no_mappings = 1
 
 nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
@@ -101,6 +108,9 @@ nmap <Up> <C-W>+
 nmap <Down> <C-W>-
 nmap <Left> <C-W><
 nmap <Right> <C-W>>
+
+" Trying out some fancy ESC-avoidance
+imap kj <Esc>
 
 "set colorcolumn=81
 highlight ColorColumn ctermbg=darkblue

@@ -10,15 +10,18 @@
 	date = local
 [alias]
 	b = branch
+	c = clone
 	cm = commit
 	co = checkout
 	d = diff
+	dc = diff --cached
 	f = fetch
 	h = push
+	hu = "!f() { branch=$(git symbolic-ref --short HEAD) && git push --set-upstream $1 $branch; }; f"
 	l = pull
 	lr = pull --rebase
 	r = rebase
-	gg = log --decorate --all --graph --oneline --name-status
+	gg = log --all --graph --name-status --pretty=tformat:'%C(auto)%h%d %s %Cgreen(%cr) %C(bold blue)<%an>'
 	graph = log --decorate --all --graph
 	lg = log --graph --branches --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 	sb = status -sb
